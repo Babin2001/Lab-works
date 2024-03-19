@@ -1,0 +1,74 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Fish Species Classification</title>
+</head>
+<body>
+
+<h1>Fish Species Classification</h1>
+
+<form id="fish-form">
+    
+
+
+    <label for="length1">Weight:</label>
+    <input type="text" id="length1" name="length1" required><br>
+    
+    <label for="length2">Length 1:</label>
+    <input type="text" id="length2" name="length2" required><br>
+    
+    <label for="length3">Length 2:</label>
+    <input type="text" id="length3" name="length3" required><br>
+    
+    <label for="height">Length 3:</label>
+    <input type="text" id="height" name="height" required><br>
+    <label for="width">Height:</label>
+    <input type="text" id="width" name="width" required><br>
+
+    <label for="weight">width:</label>
+    <input type="text" id="weight" name="weight" required><br>
+    
+    
+    
+     <!-- New input field for weight -->
+    
+    <button type="submit">Predict Species</button>
+</form>
+
+<div id="result"></div>
+
+<script>
+document.getElementById("fish-form").addEventListener("submit", function(event) {
+    event.preventDefault(); // Prevent default form submission
+    predict(); // Call predict function when form is submitted
+});
+
+function predict() {
+    var length1 = parseFloat(document.getElementById("length1").value);
+    var length2 = parseFloat(document.getElementById("length2").value);
+    var length3 = parseFloat(document.getElementById("length3").value);
+    var height = parseFloat(document.getElementById("height").value);
+    var width = parseFloat(document.getElementById("width").value);
+    var weight = parseFloat(document.getElementById("weight").value); // Get weight value
+    
+    fetch('/predict', {
+        method: 'POST',
+        headers: {
+            'Content-Type': 'application/x-www-form-urlencoded'
+        },
+        body: 'length1=' + length1 + '&length2=' + length2 + '&length3=' + length3 + '&height=' + height + '&width=' + width + '&weight=' + weight // Include weight in the request body
+    })
+    .then(response => response.json())
+    .then(data => {
+        document.getElementById("result").innerText = "Predicted Species: " + data.prediction;
+    })
+    .catch(error => {
+        console.error('Error:', error);
+    });
+}
+</script>
+
+</body>
+</html>
